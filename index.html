@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goal Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar" aria-label="Goal tracker overview">
+        <div>
+          <p class="eyebrow">Goal Tracker</p>
+          <h1>Build progress one step at a time.</h1>
+        </div>
+        <button class="primary-action" id="newGoalButton" type="button">New Goal</button>
+      </header>
+
+      <section class="workspace" aria-label="Goal workspace">
+        <aside class="goal-panel" aria-label="Main goals">
+          <div class="panel-heading">
+            <div>
+              <h2>Main Goals</h2>
+              <p id="goalCount">0 goals</p>
+            </div>
+            <label class="field compact-field" for="sortGoals">
+              <span>Sort</span>
+              <select id="sortGoals">
+                <option value="priority">Priority</option>
+                <option value="progress">Progress</option>
+                <option value="name">Name</option>
+                <option value="newest">Newest</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="goal-list" id="goalList" aria-live="polite"></div>
+        </aside>
+
+        <section class="detail-panel" aria-label="Selected goal">
+          <div class="empty-state" id="emptyState">
+            <p class="eyebrow">Ready when you are</p>
+            <h2>Add your first goal</h2>
+            <p>
+              Create a main goal, choose its priority, set a number-based success metric,
+              then break it into steps you can check off.
+            </p>
+            <div class="empty-actions">
+              <button class="primary-action" id="emptyCreateButton" type="button">Create Goal</button>
+              <button class="secondary-action" id="exampleGoalButton" type="button">Use Example</button>
+            </div>
+          </div>
+
+          <article class="goal-detail hidden" id="goalDetail">
+            <div class="detail-header">
+              <div>
+                <p class="eyebrow">Selected Goal</p>
+                <h2 id="detailName"></h2>
+                <div class="meta-row">
+                  <span class="priority-pill" id="detailPriority"></span>
+                  <span id="detailMetric"></span>
+                </div>
+              </div>
+              <div class="detail-actions">
+                <button class="secondary-action" id="editGoalButton" type="button">Edit</button>
+                <button class="danger-action" id="deleteGoalButton" type="button">Delete</button>
+              </div>
+            </div>
+
+            <div class="progress-grid" aria-label="Progress overview">
+              <div class="progress-block">
+                <div class="progress-label">
+                  <span>Goal Progress</span>
+                  <strong id="checklistPercent">0%</strong>
+                </div>
+                <div class="progress-track" aria-hidden="true">
+                  <div class="progress-fill checklist-fill" id="checklistFill"></div>
+                </div>
+              </div>
+
+              <form class="metric-editor" id="metricForm">
+                <label class="field" for="currentMetric">
+                  <span>Current metric</span>
+                  <input id="currentMetric" type="number" min="0" step="1" />
+                </label>
+                <button class="secondary-action" type="submit">Update</button>
+              </form>
+            </div>
+
+            <div class="small-goal-section">
+              <div class="section-heading">
+                <div>
+                  <h3>Steps</h3>
+                  <p id="smallGoalSummary">No steps yet</p>
+                </div>
+              </div>
+
+              <form class="small-goal-form" id="smallGoalForm">
+                <label class="field" for="smallGoalInput">
+                  <span>Step</span>
+                  <input
+                    id="smallGoalInput"
+                    type="text"
+                    placeholder="Example: Finish the first workout"
+                    autocomplete="off"
+                  />
+                </label>
+                <button class="primary-action" type="submit">Add</button>
+              </form>
+
+              <div class="small-goal-list" id="smallGoalList" aria-live="polite"></div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <dialog class="goal-dialog" id="goalDialog">
+      <form class="goal-form" id="goalForm" method="dialog">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow" id="dialogMode">New Goal</p>
+            <h2 id="dialogTitle">Create a main goal</h2>
+          </div>
+          <button class="icon-action" id="closeDialogButton" type="button" aria-label="Close">×</button>
+        </div>
+
+        <label class="field" for="goalName">
+          <span>Goal name</span>
+          <input
+            id="goalName"
+            type="text"
+            placeholder="Example: Lose 20 pounds"
+            autocomplete="off"
+            required
+          />
+        </label>
+
+        <label class="field" for="goalPriority">
+          <span>Priority</span>
+          <select id="goalPriority" required>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </label>
+
+        <div class="metric-fields">
+          <label class="field" for="goalCurrent">
+            <span>Current</span>
+            <input id="goalCurrent" type="number" min="0" step="1" value="0" required />
+          </label>
+
+          <label class="field" for="goalTarget">
+            <span>Target</span>
+            <input id="goalTarget" type="number" min="1" step="1" value="1" required />
+          </label>
+
+          <label class="field" for="goalUnit">
+            <span>Unit</span>
+            <input id="goalUnit" type="text" placeholder="pages, pounds, dollars" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="secondary-action" id="cancelGoalButton" type="button">Cancel</button>
+          <button class="primary-action" type="submit" id="saveGoalButton">Save Goal</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
