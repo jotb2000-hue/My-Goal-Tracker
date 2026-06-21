@@ -1,215 +1,101 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Goal Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0a0a0b" />
+    <title>JAY OS — Personal Command Center</title>
+    <meta name="description" content="JAY OS — a personal command center for fitness, music, productivity and growth." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <header class="topbar" aria-label="Goal tracker overview">
-        <div>
-          <p class="eyebrow">Goal Tracker</p>
-          <h1>Build progress one step at a time.</h1>
-          <p class="hero-copy">
-            Track your main goals, choose today's priorities, and keep every step moving.
-          </p>
-        </div>
-        <button class="primary-action" id="newGoalButton" type="button">New Goal</button>
-      </header>
+    <!-- App boot loader -->
+    <div class="boot" id="boot">
+      <div class="boot-mark">JAY<span>OS</span></div>
+    </div>
 
-      <section class="dashboard-grid" aria-label="Dashboard summary">
-        <article class="stat-card">
-          <span>Total Goals</span>
-          <strong id="statTotalGoals">0</strong>
-        </article>
-        <article class="stat-card">
-          <span>Completed</span>
-          <strong id="statCompletedGoals">0</strong>
-        </article>
-        <article class="stat-card">
-          <span>Average Progress</span>
-          <strong id="statAverageProgress">0%</strong>
-        </article>
-
-        <section class="daily-card" aria-label="Daily Top 3">
-          <div class="daily-heading">
-            <div>
-              <p class="eyebrow">Today</p>
-              <h2>Daily Top 3</h2>
-            </div>
-            <span id="dailyDate"></span>
+    <div class="layout" id="layout">
+      <!-- Sidebar navigation -->
+      <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+        <div class="brand">
+          <div class="brand-mark">J<span>OS</span></div>
+          <div class="brand-text">
+            <strong>JAY OS</strong>
+            <span>Command Center</span>
           </div>
-          <div class="daily-list" id="dailyTopList" aria-live="polite"></div>
-        </section>
-      </section>
-
-      <section class="workspace" aria-label="Goal workspace">
-        <aside class="goal-panel" aria-label="Main goals">
-          <div class="panel-heading">
-            <div>
-              <h2>Main Goals</h2>
-              <p id="goalCount">0 goals</p>
-            </div>
-            <label class="field compact-field" for="sortGoals">
-              <span>Sort</span>
-              <select id="sortGoals">
-                <option value="priority">Priority</option>
-                <option value="progress">Progress</option>
-                <option value="name">Name</option>
-                <option value="newest">Newest</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="goal-list" id="goalList" aria-live="polite"></div>
-        </aside>
-
-        <section class="detail-panel" aria-label="Selected goal">
-          <div class="empty-state" id="emptyState">
-            <p class="eyebrow">Ready when you are</p>
-            <h2>Add your first goal</h2>
-            <p>
-              Create a main goal, choose its priority, set a number-based success metric,
-              then break it into steps you can check off.
-            </p>
-            <div class="empty-actions">
-              <button class="primary-action" id="emptyCreateButton" type="button">Create Goal</button>
-              <button class="secondary-action" id="exampleGoalButton" type="button">Use Example</button>
-            </div>
-          </div>
-
-          <article class="goal-detail hidden" id="goalDetail">
-            <div class="detail-header">
-              <div>
-                <p class="eyebrow">Selected Goal</p>
-                <h2 id="detailName"></h2>
-                <div class="meta-row">
-                  <span class="priority-pill" id="detailPriority"></span>
-                  <span class="category-pill" id="detailCategory"></span>
-                  <span id="detailMetric"></span>
-                </div>
-              </div>
-              <div class="detail-actions">
-                <button class="secondary-action" id="editGoalButton" type="button">Edit</button>
-                <button class="danger-action" id="deleteGoalButton" type="button">Delete</button>
-              </div>
-            </div>
-
-            <div class="progress-grid" aria-label="Progress overview">
-              <div class="progress-block">
-                <div class="progress-label">
-                  <span>Goal Progress</span>
-                  <strong id="checklistPercent">0%</strong>
-                </div>
-                <div class="progress-track" aria-hidden="true">
-                  <div class="progress-fill checklist-fill" id="checklistFill"></div>
-                </div>
-              </div>
-
-              <form class="metric-editor" id="metricForm">
-                <label class="field" for="currentMetric">
-                  <span>Current metric</span>
-                  <input id="currentMetric" type="number" min="0" step="1" />
-                </label>
-                <button class="secondary-action" type="submit">Update</button>
-              </form>
-            </div>
-
-            <div class="small-goal-section">
-              <div class="section-heading">
-                <div>
-                  <h3>Steps</h3>
-                  <p id="smallGoalSummary">No steps yet</p>
-                </div>
-              </div>
-
-              <form class="small-goal-form" id="smallGoalForm">
-                <label class="field" for="smallGoalInput">
-                  <span>Step</span>
-                  <input
-                    id="smallGoalInput"
-                    type="text"
-                    placeholder="Example: Finish the first workout"
-                    autocomplete="off"
-                  />
-                </label>
-                <button class="primary-action" type="submit">Add</button>
-              </form>
-
-              <div class="small-goal-list" id="smallGoalList" aria-live="polite"></div>
-            </div>
-          </article>
-        </section>
-      </section>
-    </main>
-
-    <dialog class="goal-dialog" id="goalDialog">
-      <form class="goal-form" id="goalForm" method="dialog">
-        <div class="dialog-heading">
-          <div>
-            <p class="eyebrow" id="dialogMode">New Goal</p>
-            <h2 id="dialogTitle">Create a main goal</h2>
-          </div>
-          <button class="icon-action" id="closeDialogButton" type="button" aria-label="Close">&times;</button>
         </div>
 
-        <label class="field" for="goalName">
-          <span>Goal name</span>
-          <input
-            id="goalName"
-            type="text"
-            placeholder="Example: Lose 20 pounds"
-            autocomplete="off"
-            required
-          />
-        </label>
+        <nav class="nav" id="primaryNav" aria-label="Sections"></nav>
 
-        <label class="field" for="goalPriority">
-          <span>Priority</span>
-          <select id="goalPriority" required>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-        </label>
-
-        <label class="field" for="goalCategory">
-          <span>Category</span>
-          <select id="goalCategory" required>
-            <option value="Money">Money</option>
-            <option value="Music">Music</option>
-            <option value="Fitness">Fitness</option>
-            <option value="Business">Business</option>
-            <option value="Faith">Faith</option>
-            <option value="Personal">Personal</option>
-          </select>
-        </label>
-
-        <div class="metric-fields">
-          <label class="field" for="goalCurrent">
-            <span>Current</span>
-            <input id="goalCurrent" type="number" min="0" step="1" value="0" required />
-          </label>
-
-          <label class="field" for="goalTarget">
-            <span>Target</span>
-            <input id="goalTarget" type="number" min="1" step="1" value="1" required />
-          </label>
-
-          <label class="field" for="goalUnit">
-            <span>Unit</span>
-            <input id="goalUnit" type="text" placeholder="pages, pounds, dollars" autocomplete="off" />
-          </label>
+        <div class="sidebar-foot">
+          <div class="user-chip" id="userChip">
+            <div class="avatar" id="userAvatar">JC</div>
+            <div class="user-meta">
+              <strong id="userName">Joshua Collier</strong>
+              <span>Operator</span>
+            </div>
+          </div>
         </div>
+      </aside>
 
-        <div class="dialog-actions">
-          <button class="secondary-action" id="cancelGoalButton" type="button">Cancel</button>
-          <button class="primary-action" type="submit" id="saveGoalButton">Save Goal</button>
+      <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
+
+      <!-- Main column -->
+      <div class="main">
+        <header class="topbar">
+          <button class="icon-btn menu-btn" id="menuToggle" type="button" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+
+          <div class="page-title">
+            <h1 id="pageTitle">Dashboard</h1>
+            <p id="pageSubtitle">Your life at a glance.</p>
+          </div>
+
+          <div class="topbar-actions">
+            <div class="search" role="search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-4.3-4.3M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/></svg>
+              <input id="globalSearch" type="search" placeholder="Search everything…" autocomplete="off" />
+              <kbd>/</kbd>
+            </div>
+            <button class="quick-add" id="quickAddBtn" type="button" aria-label="Quick add">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              <span>Quick Add</span>
+            </button>
+          </div>
+        </header>
+
+        <main class="view" id="view" tabindex="-1"></main>
+      </div>
+    </div>
+
+    <!-- Search results overlay -->
+    <div class="overlay" id="searchOverlay" hidden>
+      <div class="overlay-panel search-panel">
+        <div class="overlay-head">
+          <h3>Search results</h3>
+          <button class="icon-btn" data-close-overlay type="button" aria-label="Close">&times;</button>
         </div>
-      </form>
-    </dialog>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+    </div>
+
+    <!-- Generic modal host -->
+    <div class="overlay" id="modalOverlay" hidden>
+      <div class="overlay-panel" id="modalPanel" role="dialog" aria-modal="true"></div>
+    </div>
+
+    <!-- Toast host -->
+    <div class="toast-host" id="toastHost" aria-live="polite"></div>
+
+    <!-- Mobile bottom bar -->
+    <nav class="mobile-bar" id="mobileBar" aria-label="Quick navigation"></nav>
 
     <script src="app.js"></script>
   </body>
